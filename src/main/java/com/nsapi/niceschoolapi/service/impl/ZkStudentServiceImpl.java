@@ -93,7 +93,7 @@ public class ZkStudentServiceImpl implements ZkStudentService {
     }
 
     @Override
-    public List<ZkMajorDB> selZkMajorDB() {
+    public List<ZkMajor> selZkMajor() {
         return zkStudentMapper.selZkMajor();
     }
 

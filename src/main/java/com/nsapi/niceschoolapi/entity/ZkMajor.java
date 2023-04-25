@@ -6,7 +6,7 @@ import java.io.Serializable;
  * 自考专业表
  */
 
-public class ZkMajorDB implements Serializable {
+public class ZkMajor implements Serializable {
 
   private Integer pid; //自考专业编号
   private String pname; //自考专业名称

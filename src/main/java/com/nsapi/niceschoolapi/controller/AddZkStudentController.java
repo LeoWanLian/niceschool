@@ -26,7 +26,7 @@ public class AddZkStudentController {
     @RequestMapping("/addZkStudentPage")
     public String selPolitics(Model model){
         //  查询政治面貌表
-        List<ZkMajorDB> stupol = zkStudentService.selZkMajorDB();
+        List<ZkMajor> stupol = zkStudentService.selZkMajor();
         model.addAttribute("stupol",stupol);
         return "view/student/addZkStudent";
     }

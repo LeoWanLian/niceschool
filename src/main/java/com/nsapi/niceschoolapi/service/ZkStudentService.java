@@ -30,5 +30,5 @@ public interface ZkStudentService {
     List<ClassinfoDB> selClassinfoDB(Integer gid);
 
     //  查询政治面貌表
-    public List<ZkMajorDB> selZkMajorDB();
+    public List<ZkMajor> selZkMajor();
 }

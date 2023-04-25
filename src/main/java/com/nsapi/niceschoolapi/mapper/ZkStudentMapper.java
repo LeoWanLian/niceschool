@@ -32,5 +32,5 @@ public interface ZkStudentMapper {
     //  根据年级查询班级
     List<ClassinfoDB> selClassinfoDB(Integer gid);
 
-    List<ZkMajorDB> selZkMajor();
+    List<ZkMajor> selZkMajor();
 }

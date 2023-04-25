@@ -97,7 +97,7 @@
     <select id="selClassinfoDB" resultType="ClassinfoDB">
         select * from classinfo where gid = #{gid}
     </select>
-    <select id="selZkMajor" resultType="ZkMajorDB">
+    <select id="selZkMajor" resultType="ZkMajor">
         select * from zk_major
     </select>
 </mapper>
