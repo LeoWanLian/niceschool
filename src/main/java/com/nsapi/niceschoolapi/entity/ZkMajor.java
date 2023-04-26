@@ -1,29 +1,57 @@
 package com.nsapi.niceschoolapi.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * 自考专业表
  */
-
+//@TableName("zk_major")
 public class ZkMajor implements Serializable {
 
-  private Integer pid; //自考专业编号
-  private String pname; //自考专业名称
+//    @TableField(strategy = FieldStrategy.IGNORED)
+    private Integer pid; //自考专业编号
 
-  public Integer getPid() {
-    return pid;
-  }
+//    @TableField(strategy = FieldStrategy.IGNORED)
+    private String pname; //自考专业名称
 
-  public void setPid(Integer pid) {
-    this.pid = pid;
-  }
+//    @TableField(strategy = FieldStrategy.IGNORED)
+    private String remarks;//备注
 
-  public String getPname() {
-    return pname;
-  }
+    @TableField(exist = false)
+    private Set<SubjectDB> subjectDBSet;//课程
 
-  public void setPname(String pname) {
-    this.pname = pname;
-  }
+    public Integer getPid() {
+        return pid;
+    }
+
+    public void setPid(Integer pid) {
+        this.pid = pid;
+    }
+
+    public String getPname() {
+        return pname;
+    }
+
+    public void setPname(String pname) {
+        this.pname = pname;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public Set<SubjectDB> getSubjectSet() {
+        return subjectDBSet;
+    }
+
+    public void setSubjectSet(Set<SubjectDB> subjectDBSet) {
+        this.subjectDBSet = subjectDBSet;
+    }
 }

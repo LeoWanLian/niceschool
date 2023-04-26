@@ -10,11 +10,11 @@ import java.util.Set;
 
 public interface ZkMajorMapper extends BaseMapper<ZkMajor> {
 
-    void saveRoleMenus(@Param("roleId") String roleId,  @Param("menus") Set<Menu> menuSet);
+//    void saveRoleMenus(@Param("roleId") String roleId,  @Param("menus") Set<Menu> menuSet);
 
-    ZkMajor selectRoleById(@Param("roleId") String roleId);
+//    ZkMajor selectMajorById(@Param("majorId") Integer majorId);
 
-    void dropRoleMenus(@Param("roleId") String roleId);
+//    void dropRoleMenus(@Param("roleId") String roleId);
 
-    void dropRoleUsers(@Param("roleId") String roleId);
+//    void dropRoleUsers(@Param("roleId") String roleId);
 }

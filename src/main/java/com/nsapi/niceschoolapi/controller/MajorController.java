@@ -6,14 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.nsapi.niceschoolapi.common.annotation.SysLog;
 import com.nsapi.niceschoolapi.common.base.PageData;
 import com.nsapi.niceschoolapi.common.util.ResponseEntity;
-import com.nsapi.niceschoolapi.entity.Menu;
-import com.nsapi.niceschoolapi.entity.Role;
-import com.nsapi.niceschoolapi.entity.User;
-import com.nsapi.niceschoolapi.entity.ZkMajor;
-import com.nsapi.niceschoolapi.service.MenuService;
-import com.nsapi.niceschoolapi.service.RoleService;
-import com.nsapi.niceschoolapi.service.UserService;
-import com.nsapi.niceschoolapi.service.ZkMajorService;
+import com.nsapi.niceschoolapi.entity.*;
+import com.nsapi.niceschoolapi.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +20,6 @@ import javax.servlet.ServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("major")
@@ -39,7 +32,7 @@ public class MajorController {
     UserService userService;
 
     @Autowired
-    MenuService menuService;
+    SubjectService subjectService;
 
     @Autowired
     ZkMajorService zkMajorService;
@@ -95,63 +88,61 @@ public class MajorController {
     @RequestMapping("add")
     public String add(ModelMap modelMap){
         Map<String,Object> map =  new HashMap();
-        map.put("parentId",null);
-        map.put("isShow",false);
-        List<Menu> menuList = menuService.selectAllMenus(map);
-        modelMap.put("menuList",menuList);
-        return "admin/role/add";
+        List<SubjectDB> subjectDBList = subjectService.selectAllSubjects();
+        modelMap.put("subjectList", subjectDBList);
+        return "view/param/zk/add";
     }
 
     @RequiresPermissions("sys:role:add")
     @PostMapping("add")
     @ResponseBody
-    @SysLog("保存新增角色数据")
-    public ResponseEntity add(@RequestBody Role role){
-        if(StringUtils.isBlank(role.getName())){
-            return ResponseEntity.failure("角色名称不能为空");
+    @SysLog("保存新增专业数据")
+    public ResponseEntity add(@RequestBody ZkMajor major){
+        if(StringUtils.isBlank(major.getPname())){
+            return ResponseEntity.failure("专业名称不能为空");
         }
-        if(roleService.getRoleNameCount(role.getName())>0){
-            return ResponseEntity.failure("角色名称已存在");
+        if(zkMajorService.getMajorNameCount(major.getPname())>0){
+            return ResponseEntity.failure("专业名称已存在");
         }
-        roleService.saveRole(role);
+        zkMajorService.saveMajor(major);
         return ResponseEntity.success("操作成功");
     }
 
     @RequestMapping("edit")
-    public String edit(String id,ModelMap modelMap){
-        Role role = roleService.getRoleById(id);
-        String menuIds = null;
-        if(role != null) {
-            menuIds  = role.getMenuSet().stream().map(menu -> menu.getId()).collect(Collectors.joining(","));
-        }
-        Map<String,Object> map = new HashMap();
-        map.put("parentId",null);
-        map.put("isShow",Boolean.FALSE);
-        List<Menu> menuList = menuService.selectAllMenus(map);
-        modelMap.put("role",role);
-        modelMap.put("menuList",menuList);
-        modelMap.put("menuIds",menuIds);
-        return "admin/role/edit";
+    public String edit(Integer pid,ModelMap modelMap){
+        ZkMajor major = zkMajorService.getMajorById(pid);
+//        String menuIds = null;
+//        if(role != null) {
+//            menuIds  = role.getMenuSet().stream().map(menu -> menu.getId()).collect(Collectors.joining(","));
+//        }
+//        Map<String,Object> map = new HashMap();
+//        map.put("parentId",null);
+//        map.put("isShow",Boolean.FALSE);
+//        List<Menu> menuList = menuService.selectAllMenus(map);
+        modelMap.put("major",major);
+//        modelMap.put("menuList",menuList);
+//        modelMap.put("menuIds",menuIds);
+        return "view/param/zk/edit";
     }
 
     @RequiresPermissions("sys:role:edit")
     @PostMapping("edit")
     @ResponseBody
     @SysLog("保存编辑角色数据")
-    public ResponseEntity edit(@RequestBody Role role){
-        if(StringUtils.isBlank(role.getId())){
-            return ResponseEntity.failure("角色ID不能为空");
+    public ResponseEntity edit(@RequestBody ZkMajor major){
+        if(major.getPid() == null){
+            return ResponseEntity.failure("专业ID不能为空");
         }
-        if(StringUtils.isBlank(role.getName())){
-            return ResponseEntity.failure("角色名称不能为空");
+        if(StringUtils.isBlank(major.getPname())){
+            return ResponseEntity.failure("专业名称不能为空");
         }
-        Role oldRole = roleService.getRoleById(role.getId());
-        if(!oldRole.getName().equals(role.getName())){
-            if(roleService.getRoleNameCount(role.getName())>0){
-                return ResponseEntity.failure("角色名称已存在");
+        ZkMajor oldMajor = zkMajorService.getMajorById(major.getPid());
+        if(!oldMajor.getPname().equals(major.getPname())){
+            if(zkMajorService.getMajorNameCount(major.getPname())>0){
+                return ResponseEntity.failure("专业名称已存在");
             }
         }
-        roleService.updateRole(role);
+        zkMajorService.updateMajor(major);
         return ResponseEntity.success("操作成功");
     }
 
@@ -159,12 +150,11 @@ public class MajorController {
     @PostMapping("delete")
     @ResponseBody
     @SysLog("删除角色数据")
-    public ResponseEntity delete(@RequestParam(value = "id",required = false)String id){
-        if(StringUtils.isBlank(id)){
-            return ResponseEntity.failure("角色ID不能为空");
+    public ResponseEntity delete(@RequestParam(value = "pid",required = false)Integer pid){
+        if(pid==null){
+            return ResponseEntity.failure("专业ID不能为空");
         }
-        Role role = roleService.getRoleById(id);
-        roleService.deleteRole(role);
+        zkMajorService.deleteMajorById(pid);
         return ResponseEntity.success("操作成功");
     }
 

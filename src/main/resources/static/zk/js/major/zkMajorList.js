@@ -11,7 +11,7 @@ layui.use(['layer','form','table'], function() {
             var editIndex = layer.open({
                 title : "编辑专业",
                 type : 2,
-                content : "/major/edit?id="+data.id,
+                content : "/major/edit?pid="+data.pid,
                 success : function(layero, index){
                     setTimeout(function(){
                         layer.tips('点击此处返回专业列表', '.layui-layer-setwin .layui-layer-close', {
@@ -29,10 +29,10 @@ layui.use(['layer','form','table'], function() {
         if(obj.event === "del"){
             layer.confirm("你确定要删除该专业么？",{btn:['是的,我确定','我再想想']},
                 function(){
-                    $.post("/major/delete",{"id":data.id},function (res){
+                    $.post("/major/delete",{"pid":data.pid},function (res){
                         if(res.success){
                             layer.msg("删除成功",{time: 1000},function(){
-                                table.reload('role-table', t);
+                                table.reload('major-table', t);
                             });
                         }else{
                             layer.msg(res.message);
@@ -43,7 +43,7 @@ layui.use(['layer','form','table'], function() {
         }
     });
     t = {
-        elem: '#role-table',
+        elem: '#major-table',
         even: true,
         url:'/major/list',
         method:'post',
@@ -64,7 +64,7 @@ layui.use(['layer','form','table'], function() {
             // {field:'updateUser',  title: '修改人',templet:'<div>{{  d.updateUser.nickName }}</div>'},
             // {field:'createDate',  title: '创建时间',    width:'14%',templet:'<div>{{ layui.laytpl.toDateString(d.createDate) }}</div>',unresize: true}, //单元格内容水平居中
             // {field:'updateDate',  title: '修改时间',    width:'14%',templet:'<div>{{ layui.laytpl.toDateString(d.updateDate) }}</div>',unresize: true}, //单元格内容水平居中
-            {title: '操作',fixed: 'right',  width:'15%',    align: 'center',toolbar: '#roleBar'}
+            {title: '操作',fixed: 'right',  width:'15%',    align: 'center',toolbar: '#majorBar'}
         ]]/*,
         done: function () {
             $("[data-field='id']").css('display','none');
@@ -93,7 +93,7 @@ layui.use(['layer','form','table'], function() {
         },
         //批量删除
         deleteSome : function(){
-            var checkStatus = table.checkStatus('role-table'),
+            var checkStatus = table.checkStatus('major-table'),
                 data = checkStatus.data;
             if(data.length > 0){
                 console.log(JSON.stringify(data));
@@ -110,7 +110,7 @@ layui.use(['layer','form','table'], function() {
                                 layer.close(deleteindex);
                                 if(res.success){
                                     layer.msg("删除成功",{time: 1000},function(){
-                                        table.reload('role-table', t);
+                                        table.reload('major-table', t);
                                     });
                                 }else{
                                     layer.msg(res.message);
@@ -130,7 +130,7 @@ layui.use(['layer','form','table'], function() {
     });
     //搜索
     form.on("submit(searchForm)",function(data){
-        table.reload('role-table', {
+        table.reload('major-table', {
             page: {curr: 1},
             where: data.field
         });
